@@ -1,0 +1,6 @@
+{
+  "name": "Finanzas Pro Móvil - Control de Gastos y Flujo de Caja",
+  "description": "App móvil para control de finanzas personales, gastos e ingresos diarios por cuenta o billetera (VES, USD, USDT), recordatorios de pagos, reportes de flujo de caja y registro inteligente por voz con micrófono.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
