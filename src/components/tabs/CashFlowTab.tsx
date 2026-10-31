@@ -139,12 +139,35 @@ export const CashFlowTab: React.FC<CashFlowTabProps> = ({
           remindersCount,
         }),
       });
-      const data = await res.json();
-      if (data.insight) {
-        setInsightData(data.insight);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.insight) {
+          setInsightData(data.insight);
+          return;
+        }
       }
+      // Static fallback for GitHub Pages or offline
+      setInsightData({
+        status: netCashFlow >= 0 ? 'Saludable' : 'Alerta',
+        headline: netCashFlow >= 0 ? 'Flujo de caja positivo' : 'Gastos superan los ingresos',
+        analysis: `Has registrado ${formatMoney(totalIncome, activeCurrency)} en ingresos y ${formatMoney(totalExpense, activeCurrency)} en gastos este mes. Tu tasa de ahorro es del ${savingsRate}%.`,
+        tips: [
+          'Mantén una reserva de emergencia en moneda dura (USD/USDT).',
+          'Usa el registro por voz para no olvidar pequeños pagos diarios.',
+          'Revisa las fechas en la pestaña de Pagos para evitar cortes de servicios.',
+        ],
+      });
     } catch (e) {
-      console.error('Failed to get insights:', e);
+      // Fallback on error
+      setInsightData({
+        status: netCashFlow >= 0 ? 'Saludable' : 'Alerta',
+        headline: netCashFlow >= 0 ? 'Flujo de caja positivo' : 'Gastos superan los ingresos',
+        analysis: `Control de finanzas activo en ${activeCurrency}.`,
+        tips: [
+          'Mantén una reserva de liquidez para pagos fijos del mes.',
+          'Registra tus ingresos y gastos según la billetera correspondiente.',
+        ],
+      });
     } finally {
       setLoadingInsight(false);
     }
